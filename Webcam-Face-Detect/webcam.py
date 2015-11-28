@@ -45,7 +45,8 @@ while True:
         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
     # Display the resulting frame
-    cv2.imshow("Video", frame)
+    if len(frame) > 0:
+        cv2.imshow("Video", frame)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
