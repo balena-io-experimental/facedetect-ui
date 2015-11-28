@@ -11,9 +11,15 @@ if [ ! -p /data/faces ]; then
 	mkfifo /data/faces
 fi
 
-mount -t devtmpfs /dev
-modprobe vv4l2loopback devices=2
-ffmpeg -f video4linux2 -s 800x600 -i /dev/video0 -codec copy -f v4l2 /dev/video1 -codec copy -f v4l2 /dev/video2
+if [ ! -p /data/video1 ]; then
+	mkfifo /data/video1
+fi
+
+if [ ! -p /data/video2 ]; then
+	mkfifo /data/video2
+fi
+
+ffmpeg -f video4linux2 -s 800x600 -i /dev/video0 -f avi /data/video1 -f avi /data/video2
 
 cd ./Webcam-Face-Detect
 python2.7 webcam.py

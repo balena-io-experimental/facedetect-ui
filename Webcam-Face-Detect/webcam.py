@@ -31,7 +31,7 @@ def getFacesFromPipe():
 t = threading.Thread(target=pipeReader)
 t.start()
 
-video_capture = cv2.VideoCapture(1)
+video_capture = cv2.VideoCapture('/data/video1')
 cv2.namedWindow("Video", cv2.WND_PROP_FULLSCREEN)          
 cv2.setWindowProperty("Video", cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
 while True:
