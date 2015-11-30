@@ -21,6 +21,13 @@ fi
 /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
 
 #supervisorctl -c /etc/supervisor/supervisord.conf start ffserver
+
+#while [ ! -f /var/log/ffserver.log ]; do
+#	sleep 1
+#done
+
+#tail -fn 100 /var/log/ffserver.log &
+
 supervisorctl -c /etc/supervisor/supervisord.conf start ffmpeg
 
 cd ./Webcam-Face-Detect
@@ -32,11 +39,6 @@ done
 
 tail -fn 100 /var/log/ffmpeg.log &
 
-while [ ! -f /var/log/ffserver.log ]; do
-	sleep 1
-done
-
-tail -fn 100 /var/log/ffserver.log &
 
 while [ ! -f /var/log/ffmpeg_error.log ]; do
 	sleep 1
