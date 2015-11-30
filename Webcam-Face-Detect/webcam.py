@@ -32,8 +32,9 @@ t = threading.Thread(target=pipeReader)
 t.start()
 
 video_capture = cv2.VideoCapture('/data/video1')
-cv2.namedWindow("Video", cv2.WND_PROP_FULLSCREEN)          
-cv2.setWindowProperty("Video", cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
+cv2.namedWindow("Video", cv2.WINDOW_NORMAL)
+cv2.resizeWindow("Video", 1280, 720)          
+#cv2.setWindowProperty("Video", cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
 while True:
     # Capture frame-by-frame
     ret, frame = video_capture.read()
