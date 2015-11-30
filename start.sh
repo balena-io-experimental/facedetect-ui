@@ -20,7 +20,8 @@ fi
 
 /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
 
-supervisorctl -c /etc/supervisor/supervisord.conf start ffmpeg
+supervisorctl -c /etc/supervisor/supervisord.conf start ffserver
+#supervisorctl -c /etc/supervisor/supervisord.conf start ffmpeg
 
 cd ./Webcam-Face-Detect
 python2.7 webcam.py &
@@ -31,8 +32,20 @@ done
 
 tail -fn 100 /var/log/ffmpeg.log &
 
+while [ ! -f /var/log/ffserver.log ]; do
+	sleep 1
+done
+
+tail -fn 100 /var/log/ffserver.log &
+
 while [ ! -f /var/log/ffmpeg_error.log ]; do
 	sleep 1
 done
 
-tail -fn 100 /var/log/ffmpeg_error.log
+tail -fn 100 /var/log/ffmpeg_error.log &
+
+while [ ! -f /var/log/ffserver_error.log ]; do
+	sleep 1
+done
+
+tail -fn 100 /var/log/ffserver_error.log

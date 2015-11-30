@@ -7,6 +7,7 @@ RUN apt-get update \
 	&& apt-get install -y ffmpeg supervisor
 
 COPY config/supervisor/ /etc/supervisor/
+COPY config/ffserver.conf /etc/
 
 RUN mkdir -p /usr/src/FaceDetect
 WORKDIR /usr/src/FaceDetect
