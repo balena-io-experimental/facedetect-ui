@@ -20,13 +20,13 @@ fi
 
 /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
 
-#supervisorctl -c /etc/supervisor/supervisord.conf start ffserver
+supervisorctl -c /etc/supervisor/supervisord.conf start ffserver
 
-#while [ ! -f /var/log/ffserver.log ]; do
-#	sleep 1
-#done
+while [ ! -f /var/log/ffserver.log ]; do
+	sleep 1
+done
 
-#tail -fn 100 /var/log/ffserver.log &
+tail -fn 100 /var/log/ffserver.log &
 
 supervisorctl -c /etc/supervisor/supervisord.conf start ffmpeg
 
