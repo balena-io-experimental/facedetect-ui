@@ -18,7 +18,9 @@ if [ ! -p /data/video2 ]; then
 	mkfifo /data/video2
 fi
 
-ffmpeg -f video4linux2 -s 1280x720 -i /dev/video0 -f avi -y /data/video1 -f avi -y /data/video2 &
+/usr/bin/supervisord -c /etc/supervisor/supervisord.conf
+
+supervisorctl -c /etc/supervisor/supervisord.conf start ffmpeg
 
 cd ./Webcam-Face-Detect
 python2.7 webcam.py
