@@ -16,15 +16,15 @@ def parseFace(face):
 def pipeReader():
     global faces
     while True:
-        with open(pipeFile) as openPipe:
-            for line in openPipe:
-                print(line)
-                f = map(parseFace, line.split(';'))
-                if len(f) > 0:
-                    print(f)
-                    lock.acquire()
-                    faces = f
-                    lock.release()
+        openPipe = open(pipeFile, 'r')
+        for line in openPipe:
+            print(line)
+            f = map(parseFace, line.split(';'))
+            if len(f) > 0:
+                print(f)
+                lock.acquire()
+                faces = f
+                lock.release()
 
 def getFacesFromPipe():
     lock.acquire()
