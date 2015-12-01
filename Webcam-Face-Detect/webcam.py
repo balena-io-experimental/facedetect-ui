@@ -31,7 +31,7 @@ def getFacesFromPipe():
 t = threading.Thread(target=pipeReader)
 t.start()
 
-video_capture = cv2.VideoCapture('http://0.0.0.0:8090/cam.avi')
+video_capture = cv2.VideoCapture('http://0.0.0.0:8090/cam.mjpeg')
 cv2.namedWindow("Video", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("Video", 1280, 720)          
 #cv2.setWindowProperty("Video", cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
