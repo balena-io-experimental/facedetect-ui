@@ -27,6 +27,8 @@ def pipeReader():
 def getFacesFromPipe():
     lock.acquire()
     f = faces
+    if len(f) > 0:
+        print(f)
     lock.release()
     return f
 
