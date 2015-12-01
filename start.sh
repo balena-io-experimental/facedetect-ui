@@ -18,16 +18,16 @@ if [ ! -p /data/video2 ]; then
 	mkfifo /data/video2
 fi
 
-rm /tmp/feed1.ffm || true
+#rm /tmp/feed1.ffm || true
 /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
 
-supervisorctl -c /etc/supervisor/supervisord.conf start ffserver
+#supervisorctl -c /etc/supervisor/supervisord.conf start ffserver
 
-while [ ! -f /var/log/ffserver.log ]; do
-	sleep 1
-done
+#while [ ! -f /var/log/ffserver.log ]; do
+#	sleep 1
+#done
 
-tail -fn 100 /var/log/ffserver.log &
+#tail -fn 100 /var/log/ffserver.log &
 
 supervisorctl -c /etc/supervisor/supervisord.conf start ffmpeg
 
