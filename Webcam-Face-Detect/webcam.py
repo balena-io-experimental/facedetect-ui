@@ -17,6 +17,7 @@ def pipeReader():
     while True:
         with open(pipeFile) as openPipe:
             for line in openPipe:
+                print(line)
                 f = map(parseFace, line.split(';'))
                 lock.acquire()
                 faces = f
