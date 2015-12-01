@@ -18,6 +18,7 @@ def pipeReader():
     while True:
         with open(pipeFile) as openPipe:
             for line in openPipe:
+                print(line)
                 f = map(parseFace, line.split(';'))
                 if len(f) > 0:
                     print(f)
