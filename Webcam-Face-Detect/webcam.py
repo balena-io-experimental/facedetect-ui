@@ -20,17 +20,13 @@ def pipeReader():
         for line in openPipe:
             print(line)
             f = map(parseFace, line.split(';'))
-            if len(f) > 0:
-                print(f)
-                lock.acquire()
-                faces = f
-                lock.release()
+            lock.acquire()
+            faces = f
+            lock.release()
 
 def getFacesFromPipe():
     lock.acquire()
     f = faces
-    if len(f) > 0:
-        print(f)
     lock.release()
     return f
 
@@ -51,7 +47,6 @@ while True:
     if ret and len(frame) > 0:
         # Draw a rectangle around the faces
         if len(ff) > 0:
-            print(ff)
             for t in ff:
                 if len(t) == 4:
                     x = t[0]
