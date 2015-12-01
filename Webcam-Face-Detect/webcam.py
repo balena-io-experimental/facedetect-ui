@@ -18,7 +18,6 @@ def pipeReader():
     while True:
         with open(pipeFile) as openPipe:
             for line in openPipe:
-                print(line)
                 f = map(parseFace, line.split(';'))
                 lock.acquire()
                 faces = f
@@ -41,12 +40,12 @@ while True:
     # Capture frame-by-frame
     ret, frame = video_capture.read()
 
-    faces = getFacesFromPipe()
+    ff = getFacesFromPipe()
 
     # Display the resulting frame
     if ret and len(frame) > 0:
         # Draw a rectangle around the faces
-        for (x, y, w, h) in faces:
+        for (x, y, w, h) in ff:
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
         cv2.imshow("Video", frame)
 
