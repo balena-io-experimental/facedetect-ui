@@ -20,6 +20,7 @@ def pipeReader():
             for line in openPipe:
                 f = map(parseFace, line.split(';'))
                 if len(f) > 0:
+                    print(f)
                     lock.acquire()
                     faces = f
                     lock.release()
