@@ -18,6 +18,7 @@ if [ ! -p /data/video2 ]; then
 	mkfifo /data/video2
 fi
 
+rm /tmp/feed1.ffm || true
 /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
 
 supervisorctl -c /etc/supervisor/supervisord.conf start ffserver
