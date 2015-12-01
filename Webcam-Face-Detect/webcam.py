@@ -14,6 +14,7 @@ def parseFace(face):
     return map(toInt, face.split(','))
 
 def pipeReader():
+    global faces
     while True:
         with open(pipeFile) as openPipe:
             for line in openPipe:
