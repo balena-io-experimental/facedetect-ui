@@ -33,31 +33,38 @@ def getFacesFromPipe():
 t = threading.Thread(target=pipeReader)
 t.start()
 
-video_capture = cv2.VideoCapture('/usr/src/FaceDetect/video.sdp')
 cv2.namedWindow("Video", cv2.WINDOW_NORMAL)
-cv2.resizeWindow("Video", 1280, 720)          
-#cv2.setWindowProperty("Video", cv2.WND_PROP_FULLSCREEN, cv2.cv.CV_WINDOW_FULLSCREEN)
+cv2.resizeWindow("Video", 1280, 720)
+
 while True:
-    # Capture frame-by-frame
-    ret, frame = video_capture.read()
+    video_capture = cv2.VideoCapture('/usr/src/FaceDetect/video.sdp')
+    if not video_capture:
+        time.sleep(0.1)
+        continue
+    while True:
+        # Capture frame-by-frame
+        ret, frame = video_capture.read()
+        if not ret:
+            video_capture.release()
+            time.sleep(0.1)
+            break
 
-    ff = getFacesFromPipe()
+        ff = getFacesFromPipe()
 
-    # Display the resulting frame
-    if ret and len(frame) > 0:
-        # Draw a rectangle around the faces
-        if len(ff) > 0:
-            for t in ff:
-                if len(t) == 4:
-                    x = t[0]
-                    y = t[1]
-                    w = t[2]
-                    h = t[3]                    
-                    cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-        cv2.imshow("Video", frame)
+        # Display the resulting frame
+        if len(frame) > 0:
+            # Draw a rectangle around the faces
+            if len(ff) > 0:
+                for t in ff:
+                    if len(t) == 4:
+                        x = t[0]
+                        y = t[1]
+                        w = t[2]
+                        h = t[3]                    
+                        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+            cv2.imshow("Video", frame)
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+        cv2.waitKey(1)
 
 # When everything is done, release the capture
 video_capture.release()
