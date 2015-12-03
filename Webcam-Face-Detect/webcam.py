@@ -2,6 +2,7 @@ import cv2
 import sys
 import os
 import threading
+import time
 
 pipeFile = "/data/faces"
 faces = []
