@@ -3,10 +3,18 @@ import sys
 import os
 import threading
 import time
+import json
+import urllib2
+
+appToQuery = os.environ.get('ALGORITHM_APP_ID')
+if not appToQuery:
+    appToQuery = '9089'
 
 pipeFile = "/data/faces"
 faces = []
-lock = threading.Lock()
+facesLock = threading.Lock()
+statusLock = threading.Lock()
+deviceStatus = ''
 
 def toInt(s):
     return int(s)
@@ -21,18 +29,45 @@ def pipeReader():
         for line in openPipe:
             print(line)
             f = map(parseFace, line.split(';'))
-            lock.acquire()
+            facesLock.acquire()
             faces = f
-            lock.release()
+            facesLock.release()
+
+def deviceStatusReader():
+    global deviceStatus
+    while True:
+        status = {}
+        try:
+            status = json.load(urllib2.urlopen(os.environ.get('RESIN_SUPERVISOR_ADDRESS') + '/v1/device?appId=' + appToQuery + '&apikey=' + os.environ['RESIN_SUPERVISOR_API_KEY']))
+        except urllib2.HTTPError:
+            print('Failed to get device status')
+    statusLock.acquire()
+    if 'download_progress' in status:
+        deviceStatus = 'Downloading new algorithm: ' + str(status['download_progress']) + '%'
+    elif 'commit' in status:
+        deviceStatus = 'Algorithm version ' + status['commit']
+    else:
+        deviceStatus = ''
+    statusLock.release()
+    time.sleep(1)
 
 def getFacesFromPipe():
-    lock.acquire()
+    facesLock.acquire()
     f = faces
-    lock.release()
+    facesLock.release()
     return f
+
+def getDeviceStatus():
+    statusLock.acquire()
+    status = deviceStatus
+    statusLock.release()
+    return status
 
 t = threading.Thread(target=pipeReader)
 t.start()
+
+t2 = threading.Thread(target=deviceStatusReader)
+t2.start()
 
 cv2.namedWindow("Video", cv2.WINDOW_NORMAL)
 cv2.resizeWindow("Video", 1280, 720)
@@ -51,6 +86,7 @@ while True:
             break
 
         ff = getFacesFromPipe()
+        status = getDeviceStatus()
 
         # Display the resulting frame
         if len(frame) > 0:
@@ -63,6 +99,7 @@ while True:
                         w = t[2]
                         h = t[3]                    
                         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+            cv2.putText(frame, status, (10, 710), cv2.FONT_HERSHEY_SIMPLEX, 4, (255,255,255), 2, cv2.LINE_AA)
             frame = cv2.flip(frame, 1)
             cv2.imshow("Video", frame)
 
