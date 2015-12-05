@@ -55,6 +55,7 @@ def deviceStatusReader():
         time.sleep(0.3)
 
 def getFacesFromPipe():
+    global faces
     facesLock.acquire()
     if time.clock() - lastFace > 2:
         faces = []
