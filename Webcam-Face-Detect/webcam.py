@@ -47,7 +47,7 @@ def deviceStatusReader():
     elif 'commit' in status:
         deviceStatus = 'Algorithm version ' + status['commit']
     else:
-        deviceStatus = ''
+        deviceStatus = 'Unkown algorithm version'
     statusLock.release()
     time.sleep(1)
 
@@ -99,8 +99,8 @@ while True:
                         w = t[2]
                         h = t[3]                    
                         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-            cv2.putText(frame, status, (10, 710), cv2.FONT_HERSHEY_SIMPLEX, 4, (255,255,255), 2)
             frame = cv2.flip(frame, 1)
+            cv2.putText(frame, status, (10, 710), cv2.FONT_HERSHEY_SIMPLEX, 4, (255,255,255), 2)
             cv2.imshow("Video", frame)
 
         cv2.waitKey(1)
