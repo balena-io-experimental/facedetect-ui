@@ -52,7 +52,7 @@ def deviceStatusReader():
         else:
             deviceStatus = 'Algorithm: ' + status['status']
         statusLock.release()
-        time.sleep(1)
+        time.sleep(0.3)
 
 def getFacesFromPipe():
     facesLock.acquire()
