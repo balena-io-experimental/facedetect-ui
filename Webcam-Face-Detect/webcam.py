@@ -13,6 +13,7 @@ if not appToQuery:
 pipeFile = "/data/faces"
 faces = []
 facesLock = threading.Lock()
+lastFace = time.clock()
 statusLock = threading.Lock()
 deviceStatus = ''
 
@@ -24,6 +25,7 @@ def parseFace(face):
 
 def pipeReader():
     global faces
+    global lastFace
     while True:
         openPipe = open(pipeFile, 'r')
         for line in openPipe:
@@ -31,6 +33,7 @@ def pipeReader():
             f = map(parseFace, line.split(';'))
             facesLock.acquire()
             faces = f
+            lastFace = time.clock()
             facesLock.release()
 
 def deviceStatusReader():
@@ -44,15 +47,17 @@ def deviceStatusReader():
         statusLock.acquire()
         if 'download_progress' in status and status['download_progress']:
             deviceStatus = 'Downloading new algorithm: ' + str(status['download_progress']) + '%'
-        elif 'commit' in status:
+        elif 'commit' in status and status['status'] == 'Idle':
             deviceStatus = 'Algorithm version ' + status['commit'][0:8]
         else:
-            deviceStatus = 'Unkown algorithm version'
+            deviceStatus = 'Algorithm: ' + status['status']
         statusLock.release()
         time.sleep(1)
 
 def getFacesFromPipe():
     facesLock.acquire()
+    if time.clock() - lastFace > 2:
+        faces = []
     f = faces
     facesLock.release()
     return f
@@ -100,7 +105,7 @@ while True:
                         h = t[3]                    
                         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
             frame = cv2.flip(frame, 1)
-            cv2.putText(frame, status, (10, 710), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255,255,255), 1)
+            cv2.putText(frame, status, (10, 710), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (102, 255, 255), 2)
             cv2.imshow("Video", frame)
 
         cv2.waitKey(1)
