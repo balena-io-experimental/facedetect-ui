@@ -42,7 +42,7 @@ def deviceStatusReader():
         except urllib2.HTTPError:
             print('Failed to get device status')
         statusLock.acquire()
-        if 'download_progress' in status:
+        if 'download_progress' in status and status['download_progress']:
             deviceStatus = 'Downloading new algorithm: ' + str(status['download_progress']) + '%'
         elif 'commit' in status:
             deviceStatus = 'Algorithm version ' + status['commit'][0:8]
