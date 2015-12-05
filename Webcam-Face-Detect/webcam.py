@@ -41,15 +41,15 @@ def deviceStatusReader():
             status = json.load(urllib2.urlopen(os.environ.get('RESIN_SUPERVISOR_ADDRESS') + '/v1/device?appId=' + appToQuery + '&apikey=' + os.environ['RESIN_SUPERVISOR_API_KEY']))
         except urllib2.HTTPError:
             print('Failed to get device status')
-    statusLock.acquire()
-    if 'download_progress' in status:
-        deviceStatus = 'Downloading new algorithm: ' + str(status['download_progress']) + '%'
-    elif 'commit' in status:
-        deviceStatus = 'Algorithm version ' + status['commit']
-    else:
-        deviceStatus = 'Unkown algorithm version'
-    statusLock.release()
-    time.sleep(1)
+        statusLock.acquire()
+        if 'download_progress' in status:
+            deviceStatus = 'Downloading new algorithm: ' + str(status['download_progress']) + '%'
+        elif 'commit' in status:
+            deviceStatus = 'Algorithm version ' + status['commit']
+        else:
+            deviceStatus = 'Unkown algorithm version'
+        statusLock.release()
+        time.sleep(1)
 
 def getFacesFromPipe():
     facesLock.acquire()
